@@ -1,0 +1,10 @@
+{
+    "manifest_version": 2,
+    "name": "stats_homepage",
+    "version": "0.1",
+    "chrome_url_overrides": {
+        "newtab": "popup.html"
+    }
+    
+
+}
