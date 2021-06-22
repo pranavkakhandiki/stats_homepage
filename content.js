@@ -1,5 +1,8 @@
-console.log("goteemm HA");
 
+function printfn() { 
+    var word1234123 = "pranav ag";
+    console.log(word1234123);
+}
 
 
 chrome.runtime.onMessage.addListener(gotMessage);
@@ -13,6 +16,7 @@ function gotMessage(message, sender, sendResponse){
         }
     }
 }
+
 
 
 /*
