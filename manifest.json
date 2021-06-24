@@ -10,6 +10,12 @@
             "js": ["content.js"]
         }
     ],
+    "background":{
+
+        "service_worker": "background.js"
+        
+    },
+    
     "chrome_url_overrides": {
         "newtab": "homepage.html"
     },
@@ -18,7 +24,4 @@
     "permissions":[
         "history"
     ]
-   
-
-
 }

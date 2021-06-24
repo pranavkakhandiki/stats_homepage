@@ -4,17 +4,25 @@ function printfn() {
     console.log(word1234123);
 }
 
+chrome.runtime.onopening.addListener(addstuff);
+
+function addstuff(message, sender, sendResponse) {
+    document.getElementById("id").value = message.attribute;
+}
+
 
 chrome.runtime.onMessage.addListener(gotMessage);
 
 function gotMessage(message, sender, sendResponse){
-    console.log(message.txt);
-    if (message.txt === "yo!"){
+    console.log("TEST MESSAGE");
+    console.log(message);
+    /*if (message.txt === "yo!"){
         let paragraphs = document.getElementsByTagName('p');
         for (elt of paragraphs){
             elt.style['background-color'] = '#FF00FF';
         }
-    }
+    }*/
+    return true;
 }
 
 
