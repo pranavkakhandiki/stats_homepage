@@ -4,11 +4,11 @@ function printfn() {
     console.log(word1234123);
 }
 
-chrome.runtime.onopening.addListener(addstuff);
-
 function addstuff(message, sender, sendResponse) {
     document.getElementById("id").value = message.attribute;
 }
+
+//chrome.runtime.onopening.addListener(addstuff);
 
 
 chrome.runtime.onMessage.addListener(gotMessage);
