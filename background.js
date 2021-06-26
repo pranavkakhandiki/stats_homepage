@@ -12,8 +12,6 @@ function buttonClicked(tab) {
 
 */
 
-//small change #1
-//small change #2
 
 //collects history (# determined by maxResults) and stores it in array
 const getHistory = () => {
