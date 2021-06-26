@@ -27,31 +27,44 @@ let lasturl = [];
 setInterval(getHistory, 10000);
 
 let urlQueue = [];
-let urlMap = new Map();
+let queueLength = 5;
+
 let maxNumber = 0;
 let maxUrl = "";
 //var searchQuery = new Map();
 
+const getMap = (data) => {
+    let urlMap = new Map();
+    data.forEach((page) => {
+        // parse urlof page
+        const url = new URL(page.url).hostname;
+        if (!urlMap.has(url)) { 
+            urlMap.set(url, 1);
+        }
+        else{
+            urlMap.set(url, urlMap.get(url) + 1)
+        }
+        if (urlMap.get(url) > maxNumber) {
+            maxNumber = urlMap.get(url);
+            maxUrl = url;
+        }
+    });
+    return urlMap;
+}
+
 
 const getRecentHistory = () => {
     chrome.history.search({text: '', maxResults: 50}, (data) => {
-        data.forEach((page) => {
-            // parse urlof page
-            const url = new URL(page.url).hostname;
-            if (!urlMap.has(url)) { 
-                urlMap.set(url, 1);
-            }
-            else{
-                urlMap.set(url, urlMap.get(url) + 1)
-            }
-            if (urlMap.get(url) > maxNumber) {
-                maxNumber = urlMap.get(url);
-                maxUrl = url;
-            }
-        });
+        urlQueue.push(...data);
+        console.log(urlQueue, data);
+        if (urlQueue.length > queueLength) { 
+            urlQueue = urlQueue.slice(urlQueue.length - queueLength, urlQueue.length);
+        }
+        let urlMap = getMap(urlQueue);
+        console.log(urlMap);
+        console.log("maxUrl: ", maxUrl);
     });
-    console.log(urlMap);
-    console.log("maxUrl: ", maxUrl);
+
     
 }
 setInterval(getRecentHistory, 1000);
