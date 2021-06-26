@@ -9,9 +9,10 @@ function buttonClicked(tab) {
     }
     chrome.tabs.sendMessage(tab.id, msg)
 }
+
 */
 
-
+//small change #1
 
 //collects history (# determined by maxResults) and stores it in array
 const getHistory = () => {
@@ -26,6 +27,7 @@ const getHistory = () => {
 let lasturl = [];
 setInterval(getHistory, 10000);
 
+let urlQueue = [];
 let urlMap = new Map();
 let maxNumber = 0;
 let maxUrl = "";
