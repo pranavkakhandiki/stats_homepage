@@ -1,19 +1,39 @@
 //collects history (# determined by maxResults) and stores it in array
 
-const getHistory = () => {
-    chrome.history.search({text: '', startTime: 0 , maxResults: 100}, function(data) {
-        i = 0;
-        data.forEach((page) => {
-            i++;
-            console.log(i);
-            lasturl.push(page.url)
-        });
-    });
-    console.log(lasturl)
+let lasturl = [];
+
+
+const getAvgLength = () => {
+    let sum = 0;
+    for (const i in lasturl){
+        sum += lasturl[i].length;
+    }
+    console.log("average len" , sum/lasturl.length);
 }
 
-let lasturl = [];
-setInterval(getHistory, 10000);
+setInterval(getAvgLength, 20000);
+//i.split("e").length - 1
+
+const getpranavpenissize = () => {
+    console.log(localStorage.getItem("pranavpenissize"));
+}
+setInterval(getpranavpenissize, 20000);
+
+const getHistory = () => {
+    //lasturl = [];
+    chrome.history.search({text: '', startTime: 0 , maxResults: 1000000}, function(data) {
+        data.forEach((page) => {
+            lasturl.push(page.url);
+        });        
+    });
+    console.log(lasturl.length);
+    if (lasturl.length != 0) {
+        console.log(lasturl[lasturl.length - 1]);
+    }
+}
+
+
+setInterval(getHistory, 1000);
 
 
 const sendHistory = () => {
@@ -21,7 +41,7 @@ const sendHistory = () => {
         (tabs) => {
             if (tabs.length > 0) {
                 chrome.tabs.sendMessage(tabs[0].id, mostrecenturl);  
-                lasturl = [];
+                //lasturl = [];
             }   
         }
     );
