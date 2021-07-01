@@ -1,14 +1,15 @@
-`1`1
-
-
 //collects history (# determined by maxResults) and stores it in array
+
 const getHistory = () => {
-    chrome.history.search({text: '', maxResults: 1}, function(data) {
+    chrome.history.search({text: '', startTime: 0 , maxResults: 100}, function(data) {
+        i = 0;
         data.forEach((page) => {
-            //console.log(page.url);
+            i++;
+            console.log(i);
             lasturl.push(page.url)
         });
     });
+    console.log(lasturl)
 }
 
 let lasturl = [];
@@ -31,7 +32,7 @@ setInterval(sendHistory, 100000);
 
 const mostRecentURL = () => {
     //if (typeof document != undefined) { 
-    document.getElementById("test").innerHTML = lasturl[0];
+    //document.getElementById("test").innerHTML = lasturl[0];
     //}
 }
 setInterval(mostRecentURL, 10000);
