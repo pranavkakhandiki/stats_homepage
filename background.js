@@ -1,59 +1,80 @@
 //collects history (# determined by maxResults) and stores it in array
 
-let lasturl = [];
-let lasttitle = [];
+let lastUrl = [];
+let lastTitle = [];
 
-
+/**
+* Gets average length of google searches
+*/
 const getAvgLength = () => {
     let sum = 0;
-    for (const i in lasturl){
-        sum += lasturl[i].length;
+    for (const i in lastTitle){
+        sum += lastTitle[i].length;
     }
-    console.log("average len" , sum/lasturl.length);
+    console.log("average length:", sum/lastTitle.length);
 }
 
+/**
+* Gets number of google searches
+*/
+const numSearches = () => {
+    return lastTitle.length;
+}
 
-const numberThes = () => {
-    //loop through history
-    //parse for all google searches
-    //count thes
+/**
+* Gets number of questions asked for google searches
+*/
+const numQuestionsAsked = () => {
     let sum = 0;
-    for (const i in lasturl){
-
-        if (lasttitle[i].endsWith('Google Search'))
-        {
-            sum+=(lasttitle[i].match(/the/g) || []).length;
-            //console.log(sum);
+    let qWords = ['?','who','what','where','when','why','how', 'can', 'could','should','would']
+    
+    for (const i in lastTitle){
+        for (const j in qWords) {
+            if (lastTitle[i].includes(qWords[j])){
+                sum+=1;
+            }
         }
     }
-    console.log(sum);
+    console.log('Questions: ', sum)
+}
+
+/**
+* Gets number of instances of 'the' in google searhces
+*/
+const numberThes = () => {
+    let sum = 0;
+    for (const i in lastTitle){
+        sum+=(lastTitle[i].match(/the/g) || []).length;
+        //console.log(sum);
+    }
+    console.log('Thes: ', sum);
 }
 
 setInterval(getAvgLength, 20000);
 setInterval(numberThes, 10000);
+setInterval(numQuestionsAsked, 10000);
 //i.split("e").length - 1
-
-const bharatSimpAP = () => {
-    //console.log(localStorage.getItem("bharatSimpAP"));
-}
-setInterval(bharatSimpAP, 20000);
 
 const getHistory = () => {
     //lasturl = [];
+    lastTitle = [];
     chrome.history.search({text: '', startTime: 0 , maxResults: 1000000}, function(data) {
         data.forEach((page) => {
-            lasturl.push(page.url);
-            lasttitle.push(page.title)
+            lastUrl.push(page.url);
+            //adds only defined page titles that are regular google searches (like 'what is the weather') to array
+            if (page.title != undefined && page.title.endsWith('Google Search')){
+                lastTitle.push(page.title)
+            }
         });        
     });
     //console.log(lasttitle.length);
-    if (lasturl.length != 0) {
-        console.log(lasturl[lasturl.length - 1]);
+    if (lastUrl.length != 0) {
+        console.log(lastUrl[lastUrl.length - 1]);
     }
 }
 
 
-setInterval(getHistory, 1000);
+setInterval(getHistory, 10000);
 
 
 const sendHistory = () => {
