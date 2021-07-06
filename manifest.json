@@ -20,6 +20,7 @@
     
     "description": "A homepage informing you about your daily browsing",
     "permissions":[
-        "history"
+        "history",
+        "tabs"
     ]
 }
