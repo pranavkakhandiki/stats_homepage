@@ -2,7 +2,6 @@
 
 let lastUrl = [];
 let lastTitle = [];
-let timeSpentUrl = new Map();
 
 /**
  * Gets average length of google searches
@@ -36,15 +35,22 @@ const timeSpent = () => {
         if (tabs.length === 0) {
             return;
         }
-
+        let timeSpentUrl;
+        if (localStorage.getItem('timeSpentUrl') === undefined) {
+            timeSpentUrl = new Map();
+        } else {
+            timeSpentUrl = new Map(JSON.parse(localStorage.getItem('timeSpentUrl')));
+        }
         let activeUrl = new URL(tabs[0].url);
         let hostname = activeUrl.hostname;
-        if (timeSpentUrl.hasOwnProperty(hostname)) {
+        if (timeSpentUrl.has(hostname)) {
             timeSpentUrl.set(hostname, timeSpentUrl.get(hostname) + 1);
         }
         else {
             timeSpentUrl.set(hostname, 1);
         }
+        console.log(timeSpentUrl);
+        localStorage.setItem('timeSpentUrl', JSON.stringify(Array.from(timeSpentUrl.entries())));
     });
 };
 
@@ -93,14 +99,14 @@ const numberThes = () => {
         sum += (lastTitle[i].match(/the/g) || []).length;
         //console.log(sum);
     }
-    console.log("Thes: ", sum);
+    console.log("The's: ", sum);
 };
 
 setInterval(getAvgLength, 20000);
 setInterval(numberThes, 10000);
 setInterval(numQuestionsAsked, 10000);
 setInterval(avNumWrds, 10000);
-setInterval(timeSpent, 10000);
+setInterval(timeSpent, 1000);
 //i.split("e").length - 1
 
 const getHistory = () => {
