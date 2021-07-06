@@ -1,6 +1,7 @@
 //collects history (# determined by maxResults) and stores it in array
 
 let lasturl = [];
+let lasttitle = [];
 
 
 const getAvgLength = () => {
@@ -11,22 +12,41 @@ const getAvgLength = () => {
     console.log("average len" , sum/lasturl.length);
 }
 
+
+const numberThes = () => {
+    //loop through history
+    //parse for all google searches
+    //count thes
+    let sum = 0;
+    for (const i in lasturl){
+
+        if (lasttitle[i].endsWith('Google Search'))
+        {
+            sum+=(lasttitle[i].match(/the/g) || []).length;
+            //console.log(sum);
+        }
+    }
+    console.log(sum);
+}
+
 setInterval(getAvgLength, 20000);
+setInterval(numberThes, 10000);
 //i.split("e").length - 1
 
-const getpranavpenissize = () => {
-    console.log(localStorage.getItem("pranavpenissize"));
+const bharatSimpAP = () => {
+    //console.log(localStorage.getItem("bharatSimpAP"));
 }
-setInterval(getpranavpenissize, 20000);
+setInterval(bharatSimpAP, 20000);
 
 const getHistory = () => {
     //lasturl = [];
     chrome.history.search({text: '', startTime: 0 , maxResults: 1000000}, function(data) {
         data.forEach((page) => {
             lasturl.push(page.url);
+            lasttitle.push(page.title)
         });        
     });
-    console.log(lasturl.length);
+    //console.log(lasttitle.length);
     if (lasturl.length != 0) {
         console.log(lasturl[lasturl.length - 1]);
     }
