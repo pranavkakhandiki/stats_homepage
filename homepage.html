@@ -1,11 +1,36 @@
 <html>
     <head>
         <link rel="stylesheet" href="style.css">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            body {
+              margin: 0;
+              overflow: hidden;
+            }
+          </style>
     </head>
     <body>
-        <p id = "test">initializing...</p>
+        <p id = "test">initialsite.com</p>
         <script type = "text/javascript" src="background.js"></script>
-        <img style = "max-width: 100%; overflow: hidden; margin: 0; padding: 0" src="assets/everest1.jpg">
+        <div class="image">
 
+            <img style = "max-width: 100%; overflow: hidden; margin: 0; padding: 0" src="assets/everest1.jpg">
+      
+            <h2>Text you want to display over the image</h2>
+      
+      </div>
+        <!--
+        <canvas class="myCanvas">
+            <p>Add suitable fallback here.</p>
+          </canvas>
+        <script>
+            const canvas = document.querySelector('.myCanvas');
+            const width = canvas.width = window.innerWidth;
+            const height = canvas.height = window.innerHeight/5;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = 'rgb(255, 0, 255)';
+            ctx.fillRect(0,0,width,height);
+        </script>-->
     </body>
 </html>
