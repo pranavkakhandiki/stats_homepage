@@ -222,6 +222,7 @@ const numQuestionsAsked = () => {
     }
     localStorage.setItem('numQuestions', sum);
     console.log("Questions: ", sum);
+    localStorage.setItem("numQuestions", sum);
 };
 
 /**
@@ -269,6 +270,8 @@ const getHistory = () => {
     }
 };
 
+//running get history once initially
+getHistory();
 setInterval(getHistory, 10000);
 
 const sendHistory = () => {
@@ -285,9 +288,7 @@ setInterval(sendHistory, 100000);
 
 const mostRecentURL = () => {
     if (typeof document != undefined) {
-        document.getElementById("test").innerHTML = lastUrl[0];
-        //JSON.parse(localStorage.getItem('numQuestions'))
-        console.log(localStorage.getItem('numQuestions'));
+        document.getElementById("test").innerHTML = localStorage.getItem('numQuestions');
     }
 };
 setInterval(mostRecentURL, 10000);
