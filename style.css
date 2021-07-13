@@ -5,16 +5,16 @@ body
 }  
 
 .stat {
-    color:beige;
+    color:white;
     position: absolute;
     top: 55%;
     left: 50%;
     text-align: center;
     transform: translate(-50%, -50%);
-    font-family: "Monaco";
+    font-family: "Tahoma";
     font-size: 20px;
     font-size: 3vw;
-    font-weight: bold;
+    /*font-weight: bold;*/
 }
 
 .box {
