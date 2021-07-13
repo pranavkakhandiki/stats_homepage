@@ -42,19 +42,20 @@ form{
 
   display: flex;
 
+
 }
 
 #searchBar{
   flex-grow: 3;
   color: rgba(128, 128, 128, 0.685);
-
-  font-size: 1rem;
+  background-color: #FAFAFA;
+  font-size: 1.15rem;
   
   grid-column:1/5;
   grid-row: auto;
 
   border-radius: 3rem;
-  padding: 1.25rem;
+  padding: 1.2rem;
   border: none;
 }
 
