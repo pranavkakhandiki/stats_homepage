@@ -91,7 +91,12 @@ form{
 }
 
 input#searchBar{
-  color: rgba(128, 128, 128, 0.685);
+  color: black;
+  flex-grow: 4;
+}
+
+input#searchBar:hover{
+  color: black;
   flex-grow: 4;
 }
 
