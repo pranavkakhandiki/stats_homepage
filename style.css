@@ -72,7 +72,10 @@ form{
 
   border-radius: 3rem;
   padding: 1.2rem;
-  border: none;
+  border: 3px solid rgba(150, 150, 150, .1);
+  background-clip: padding-box;
+  
+  
 }
 
 #searchBar:hover{
@@ -87,7 +90,6 @@ form{
 
   border-radius: 3rem;
   padding: 1.2rem;
-  border: none;
 }
 
 input#searchBar{
