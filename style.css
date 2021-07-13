@@ -29,3 +29,52 @@ body
     );
     opacity: 0.5;
   }
+
+
+/*all copied from fun fact extension below*/
+
+#searchBar{
+  flex-grow: 3;
+
+  color: rgba(128, 128, 128, 0.685);
+  font-size: 1rem;
+
+  grid-column:1/5;
+  grid-row: auto;
+
+  border-radius: 3rem;
+  padding: 1.25rem;
+  border-color: white;
+  border: none;
+}
+
+input#searchBar{
+  color: rgba(128, 128, 128, 0.685);
+  flex-grow: 4;
+}
+
+#searchBar:focus{
+  outline: none;
+}
+
+#searchButton{
+
+  background-color: white;
+  flex-grow: 2;
+  flex-basis: 1;
+  font-size: 1rem;
+
+  grid-column:5/6;
+  grid-row: auto;
+  margin-left: .5rem;
+
+  border-radius: 2rem;
+  
+  border: none;
+  
+  display: none;
+}
+
+#searchButton:hover{
+  border-color: black;
+}
