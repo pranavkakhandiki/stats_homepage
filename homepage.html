@@ -1,37 +1,43 @@
 <html>
-    <head>
-        <link rel="stylesheet" href="style.css">
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <style>
-            body {
-              margin: 0;
-              overflow: hidden;
-            }
-          </style>
-    </head>
-    <body>
-        <form action="http://www.google.com/search" method="GET">
-          <input id="searchBar" type="text" autocomplete="off" name="q" placeholder="Search Google or type a URL">
-          <input id="searchButton" type="submit" value="Google Search">
-        </form>
 
-        <div class="box"> </div>
+<head>
+  <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+    }
+  </style>
+</head>
 
-        <div class = "stat">
-          <p> You've asked <span id="test">[loading]...</span> questions in your past Google Searches</p> 
-          <!--<p id = "test">[loading...]</p> -->
-          
-        </div>
 
-        <script type = "text/javascript" src="background.js"></script>
-        
-       
 
-        <div class="image">
-            <img style = "max-width: 100%; overflow: hidden; margin: 0; padding: 0" src="assets/everest1.jpg" class='background'> 
-        </div>
-        <!--
+<body>
+  
+
+  <div class="box"> </div>
+
+  <div class="stat">
+    <p> You've asked <span id="test">[loading]...</span> questions in your past Google Searches</p>
+    <!--<p id = "test">[loading...]</p> -->
+
+  </div>
+
+  <script type="text/javascript" src="background.js"></script>
+
+  <form action="http://www.google.com/search" method="GET">
+    <input id="searchBar" type="text" autocomplete="off" name="q" placeholder="Search Google or type a URL">
+    <!--<input id="searchButton" type="submit" value="Google Search">-->
+  </form>
+
+  <div class="image">
+    <img style="max-width: 100%; overflow: hidden; margin: 0; padding: 0" src="assets/everest1.jpg" class='background'>
+  </div>
+
+  
+  <!--
         <canvas class="myCanvas">
             <p>Add suitable fallback here.</p>
           </canvas>
@@ -43,5 +49,6 @@
             ctx.fillStyle = 'rgb(255, 0, 255)';
             ctx.fillRect(0,0,width,height);
         </script>-->
-    </body>
+</body>
+
 </html>
