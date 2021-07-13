@@ -27,8 +27,23 @@ body
     linear-gradient(
       gray, white
     );
-    opacity: 0.5;
+    opacity: 0.4;
+    transition-duration: 0.4s;
   }
+
+.box:hover {
+  position: absolute; 
+  top: 40%;
+  width: 100%; 
+  height: 30%; 
+  background-color: gray;
+  background-image:
+  linear-gradient(
+    gray, white
+  );
+  opacity: 0.5;
+  transition-duration: 0.4s;
+}
 
 /*all copied from fun fact extension below*/
 
@@ -48,8 +63,24 @@ form{
 #searchBar{
   flex-grow: 3;
   color: rgba(128, 128, 128, 0.685);
-  background-color: #FAFAFA;
+  background-color: #F5F5F5;
   font-size: 1.15rem;
+  transition-duration: 0.4s;
+  
+  grid-column:1/5;
+  grid-row: auto;
+
+  border-radius: 3rem;
+  padding: 1.2rem;
+  border: none;
+}
+
+#searchBar:hover{
+  flex-grow: 3;
+  color: rgba(128, 128, 128, 0.685);
+  background-color: white;
+  font-size: 1.15rem;
+  transition-duration: 0.4s;
   
   grid-column:1/5;
   grid-row: auto;
