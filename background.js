@@ -291,4 +291,5 @@ const mostRecentURL = () => {
         document.getElementById("test").innerHTML = localStorage.getItem('numQuestions');
     }
 };
+mostRecentURL();
 setInterval(mostRecentURL, 10000);
