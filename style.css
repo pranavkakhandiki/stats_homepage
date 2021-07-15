@@ -20,10 +20,10 @@ body
 .stat {
     color:white;
     position: absolute;
-    top: 80%;
+    top: 85%;
     left: 50%;
     text-align: center;
-    transform: translate(-90%, -0%);
+    transform: translate(-50%, -0%);
     font-family: -apple-system, BlinkMacSystemFont, "Neue Haas Grotesk Text Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
     ;
     font-size: 20px;
@@ -35,10 +35,11 @@ body
 
 .box {
     position: absolute; 
-    top: 80%;
+    top: 87%;
     width: 55%; 
-    height: 17%; 
-    left: 2.5%;
+    height: 12%; 
+    left: 50%;
+    transform: translate(-50%, -0%);
     background-color: gray;
     background-image:
     linear-gradient(
@@ -47,15 +48,15 @@ body
     opacity: 0.2;
     transition-duration: 0.3s;
 
-    border-radius: 3rem;
+    border-radius: 2rem;
   }
 
 .box:hover {
   position: absolute; 
-  top: 79%;
+  top: 86%;
   width: 55%; 
-  height: 19%; 
-  left: 2.5%;
+  height: 14%; 
+  left: 50%;
   background-color: gray;
   background-image:
   linear-gradient(
