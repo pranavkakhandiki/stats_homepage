@@ -2,7 +2,7 @@ body
 {
  padding:0;
  margin:0;
- animation: fadeInAnimation ease 2s;
+ animation: fadeInAnimation ease 0.75s;
  animation-iteration-count: 1;
  animation-fill-mode: forwards;
 }  
@@ -57,8 +57,6 @@ body
   opacity: 0.5;
   transition-duration: 0.4s;
 }
-
-/*all copied from fun fact extension below*/
 
 form{
   grid-column: 5/13;
