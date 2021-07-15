@@ -23,7 +23,7 @@ body
     top: 80%;
     left: 50%;
     text-align: center;
-    transform: translate(-95%, -0%);
+    transform: translate(-90%, -0%);
     font-family: -apple-system, BlinkMacSystemFont, "Neue Haas Grotesk Text Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
     ;
     font-size: 20px;
@@ -36,12 +36,13 @@ body
     top: 80%;
     width: 55%; 
     height: 17%; 
+    left: 2.5%;
     background-color: gray;
     background-image:
     linear-gradient(
-      gray, white
+      slategray, mintcream
     );
-    opacity: 0.35;
+    opacity: 0.3;
     transition-duration: 0.3s;
 
     border-radius: 3rem;
@@ -52,12 +53,13 @@ body
   top: 79%;
   width: 55%; 
   height: 19%; 
+  left: 2.5%;
   background-color: gray;
   background-image:
   linear-gradient(
-    gray, white
+    slategray, mintcream
   );
-  opacity: 0.5;
+  opacity: 0.55;
   transition-duration: 0.3s;
 }
 
