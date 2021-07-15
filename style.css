@@ -31,6 +31,8 @@ body
     /*font-weight: bold;*/
 }
 
+
+
 .box {
     position: absolute; 
     top: 80%;
@@ -59,9 +61,26 @@ body
   linear-gradient(
     slategray, mintcream
   );
-  opacity: 0.55;
+  opacity: 0.4;
   transition-duration: 0.3s;
 }
+
+/*.stat:hover ~ .box {
+  position: absolute; 
+  top: 79%;
+  width: 55%; 
+  height: 19%; 
+  left: 2.5%;
+  background-color: gray;
+  background-image:
+  linear-gradient(
+    slategray, mintcream
+  );
+  opacity: 0.55;
+  transition-duration: 0.3s;
+
+}*/
+
 
 form{
   grid-column: 5/13;
