@@ -24,9 +24,10 @@ body
     left: 50%;
     text-align: center;
     transform: translate(-50%, -50%);
-    font-family: "Tahoma";
+    font-family: -apple-system, BlinkMacSystemFont, "Neue Haas Grotesk Text Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    ;
     font-size: 20px;
-    font-size: 3vw;
+    font-size: 3.1vw;
     /*font-weight: bold;*/
 }
 
