@@ -2,18 +2,36 @@
 
 let lastUrl = [];
 let lastTitle = [];
+if (typeof localStorage.getItem('lastSearchTimeStorage') == "undefined") {
+    localStorage.setItem('lastSearchTimeStorage',0)
+}
 
+// check if we've already done the initial data grab
+// run the update loop for the stats
 
   
+const mainLoopFunction = () =>  {
+    let searchLength = 0;
+    let numWords = 0;
+    let distrWords = new Map();
+    let numLetters = 0;
+    let distrLetters = new Map();
+
+    for (let i in lastTitle) {
+        //google search length
+        searchLength += getAvgLength(lastTitle, i);
+        numWords += numWordsSearched(lastTitle, i);
+        distrWords = numWordsSearchedDistribution(lastTitle, i, numWords);
+        numLetters += numLettersSearched(lastTitle, i);
+        distrLetters = numLettersSearchedDistribution(lastTitle, i, distrLetters);
+    }
+    let avgSearchLength = searchLength/lastTitle[i].length;
+};
 /**
  * Gets average length of google searches
  */
-const getAvgLength = () => {
-    let sum = 0;
-    for (let i in lastTitle) {
-        sum += lastTitle[i].length;
-    }
-    console.log("average length:", sum / lastTitle.length);
+const getAvgLength = (lastTitle, i) => {
+    return lastTitle[i].length;
 };
 
 /** TO BE DONE
@@ -25,28 +43,30 @@ const getAvgLength = () => {
 /** DO NOW
  * Number of words searched
  */
-const numWordsSearched = () => {
+const numWordsSearched = (lastTitle, i) => {
     let sum = 0;
-    let numWords = new Map();
-    for (const i in lastTitle) {
-        let words = lastTitle[i].split(" ");
-        sum += words.length - 2;
-        for (const index in words) {
-            let word = words[index]
-            word = word.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
-            word = word.replace(/\s{2,}/g," ");
-            if (word != "") {
-                if (numWords.has(word)) {
-                    numWords.set(word, numWords.get(word) + 1);
-                }
-                else {
-                    numWords.set(word, 1);
-                }
-            }            
-        }
+    let words = lastTitle[i].split(" ");
+    sum += words.length - 2;
+    return sum;
+}
+
+const numWordsSearchedDistribution = (lastTitle, i, numWords) => {
+    let words = lastTitle[i].split(" ");
+    sum += words.length - 2;
+    for (const index in words) {
+        let word = words[index]
+        word = word.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+        word = word.replace(/\s{2,}/g," ");
+        if (word != "") {
+            if (numWords.has(word)) {
+                numWords.set(word, numWords.get(word) + 1);
+            }
+            else {
+                numWords.set(word, 1);
+            }
+        }            
     }
-    console.log("num words searched: ", sum);
-    console.log("words searched distribution: ", numWords);
+    return numWords;
 }
 
 /** 
@@ -59,54 +79,54 @@ function isCharacterALetter(char) {
 /** DO NOW
  * Number of letters in search
  */
- const numLettersSearched = () => {
-    let sum = 0;
-    let numChars = new Map();
-
-    for (const index in lastTitle) {
-        let lastsearch = lastTitle[index];
-        lastsearch = lastsearch.replace(" - Google Search", "");
-        for (var i = 0; i < lastsearch.length; i++) {
-            let char = lastsearch.charAt(i).toLowerCase();
-            if (isCharacterALetter(char)) {
-                sum += 1;  
-                if (numChars.has(char)) {
-                    numChars.set(char, numChars.get(char) + 1);
-                }
-                else {
-                    numChars.set(char, 1);
-                } 
-            }
+const numLettersSearched = (lastTitle, index) => {
+    let lastsearch = lastTitle[index];
+    lastsearch = lastsearch.replace(" - Google Search", "");
+    for (var i = 0; i < lastsearch.length; i++) {
+        let char = lastsearch.charAt(i).toLowerCase();
+        if (isCharacterALetter(char)) {
+            sum += 1;  
         }
     }
-    console.log("# of letters in search:", sum);
+    return sum;
+}
+
+const numLettersSearchedDistribution = (lastTitle, index, numChars) => {
+    let lastsearch = lastTitle[index];
+    lastsearch = lastsearch.replace(" - Google Search", "");
+    for (var i = 0; i < lastsearch.length; i++) {
+        let char = lastsearch.charAt(i).toLowerCase();
+        if (isCharacterALetter(char)) {
+            if (numChars.has(char)) {
+                numChars.set(char, numChars.get(char) + 1);
+            }
+            else {
+                numChars.set(char, 1);
+            } 
+        }
+    }
+    return numChars;
 }
 
 /** DO NOW
  * Number of numbers searched
  */
-const numNumsSearched = () => {
-    let numNums = new Map();
-
-    for (let i in lastTitle) {
-        let arr = lastTitle[i].replace("Google search", "").split(" ");
-        for (let j in arr) {
-            let str = arr[j];
-            if (typeof str != "string") continue; // we only process strings!
-            if (!isNaN(str) && !isNaN(parseFloat(str))) {
-                let key = parseFloat(str);
-                if (numNums.has(key)) {
-                    numNums.set(key, numNums.get(key) + 1);
-                }
-                else {
-                    numNums.set(key, 1);
-                }
+const numNumsSearched = (lastTitle, i, numNums) => {
+    let arr = lastTitle[i].replace("Google search", "").split(" ");
+    for (let j in arr) {
+        let str = arr[j];
+        if (typeof str != "string") continue; // we only process strings!
+        if (!isNaN(str) && !isNaN(parseFloat(str))) {
+            let key = parseFloat(str);
+            if (numNums.has(key)) {
+                numNums.set(key, numNums.get(key) + 1);
+            }
+            else {
+                numNums.set(key, 1);
             }
         }
-
     }
-    console.log("num #s searched: ", numNums);
-
+    return numNums;
 }
 
 /** DO NOW
@@ -221,8 +241,6 @@ const numQuestionsAsked = () => {
         }
     }
     localStorage.setItem('numQuestions', sum);
-    console.log("Questions: ", sum);
-    localStorage.setItem("numQuestions", sum);
 };
 
 /**
@@ -237,31 +255,37 @@ const numberThes = () => {
     console.log("The's: ", sum);
 };
 
-setInterval(getAvgLength, 20000);
+//setInterval(getAvgLength, 20000);
 setInterval(numberThes, 10000);
 setInterval(numQuestionsAsked, 10000);
 setInterval(avNumWrds, 10000);
-setInterval(numNumsSearched, 10000);
-setInterval(numWordsSearched, 10000);
-setInterval(numLettersSearched, 10000);
+//setInterval(numNumsSearched, 10000);
+//setInterval(numLettersSearched, 10000);
 setInterval(timeSpent, 1000); // Should increment this to like 30 seconds or 1 minute
-setInterval(numNumsSearched, 10000);
+//setInterval(numNumsSearched, 10000);
 setInterval(numPunctuationMarks, 10000);
 
 
 const getHistory = () => {
     //lasturl = [];
     lastTitle = [];
+    console.log(localStorage.getItem('lastSearchTimeStorage'));
     chrome.history.search(
-        { text: "", startTime: 0, maxResults: 1000000000 },
+        { text: "", startTime: parseInt(localStorage.getItem('lastSearchTimeStorage')), maxResults: 1000000000 },
         function (data) {
+            let i = 0;
+            if(data[0] != undefined){
+                localStorage.setItem('lastSearchTimeStorage', data[0].lastVisitTime + 1);
+            }
             data.forEach((page) => {
+                i += 1;
                 lastUrl.push(page.url);
                 //adds only defined page titles that are regular google searches (like 'what is the weather') to array
                 if (page.title != undefined && page.title.endsWith("Google Search")) {
                     lastTitle.push(page.title);
                 }
             });
+            console.log(i);
         }
     );
     //console.log(lasttitle.length);
@@ -271,7 +295,7 @@ const getHistory = () => {
 };
 
 //running get history once initially
-getHistory();
+//getHistory();
 setInterval(getHistory, 10000);
 
 const sendHistory = () => {
