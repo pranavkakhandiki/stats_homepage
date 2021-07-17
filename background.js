@@ -2,8 +2,16 @@
 
 let lastUrl = [];
 let lastTitle = [];
-if (typeof localStorage.getItem('lastSearchTimeStorage') == "undefined") {
-    localStorage.setItem('lastSearchTimeStorage',0)
+
+localStorage.setItem('lastSearchTimeStorage',undefined)
+if (localStorage.getItem('lastSearchTimeStorage') === undefined) {
+    localStorage.setItem('lastSearchTimeStorage',0);
+}
+
+localStorage.setItem('numQuestions', undefined);
+if (localStorage.getItem('numQuestions') === undefined) {
+    console.log("This must print");
+    localStorage.setItem('numQuestions', 0);
 }
 
 // check if we've already done the initial data grab
@@ -139,9 +147,9 @@ const numPunctuationMarks = () => {
     let sum = 0;
     const punctuation = '!"#$%&\'()*+,-./:;<=>?@[]\\^_`{|}~';
     for (const index in lastTitle) {
-        var lastsearch = lastTitle[index];
+        let lastsearch = lastTitle[index];
         lastsearch = lastsearch.replace("Google Search", "");
-        for (var i = 0; i < lastsearch.length; i++) {
+        for (let i = 0; i < lastsearch.length; i++) {
             let char = lastsearch.charAt(i);
             if (punctuation.includes(char)) {
                 sum += 1;
@@ -158,12 +166,10 @@ const numPunctuationMarks = () => {
     console.log("punctuation distribution:", numPunctuation);
 }
 
-
 /**
  * Most used word
  */
 const mostUsedWord = () => {
-    
 }
 
 /**
@@ -218,6 +224,13 @@ const numSearches = () => {
  * Gets number of questions asked for google searches
  */
 const numQuestionsAsked = () => {
+    let oldNum = parseInt(localStorage.getItem('numQuestions'));
+    if(Number.isNaN(oldNum)) {
+        console.log("must print out");
+        oldNum = 0;        
+    }
+    console.log("oldNum:", oldNum);
+
     let sum = 0;
     let qWords = [
         "?",
@@ -232,7 +245,7 @@ const numQuestionsAsked = () => {
         "should",
         "would",
     ];
-
+    console.log(lastTitle.length);
     for (const i in lastTitle) {
         for (const j in qWords) {
             if (lastTitle[i].includes(qWords[j])) {
@@ -240,7 +253,8 @@ const numQuestionsAsked = () => {
             }
         }
     }
-    localStorage.setItem('numQuestions', sum);
+    localStorage.setItem('numQuestions', oldNum + sum);
+    console.log(oldNum, sum)
 };
 
 /**
@@ -267,25 +281,20 @@ setInterval(numPunctuationMarks, 10000);
 
 
 const getHistory = () => {
-    //lasturl = [];
-    lastTitle = [];
-    console.log(localStorage.getItem('lastSearchTimeStorage'));
+    lastTitle = []
     chrome.history.search(
         { text: "", startTime: parseInt(localStorage.getItem('lastSearchTimeStorage')), maxResults: 1000000000 },
         function (data) {
-            let i = 0;
             if(data[0] != undefined){
                 localStorage.setItem('lastSearchTimeStorage', data[0].lastVisitTime + 1);
             }
             data.forEach((page) => {
-                i += 1;
                 lastUrl.push(page.url);
                 //adds only defined page titles that are regular google searches (like 'what is the weather') to array
                 if (page.title != undefined && page.title.endsWith("Google Search")) {
                     lastTitle.push(page.title);
                 }
             });
-            console.log(i);
         }
     );
     //console.log(lasttitle.length);
@@ -295,7 +304,7 @@ const getHistory = () => {
 };
 
 //running get history once initially
-//getHistory();
+getHistory();
 setInterval(getHistory, 10000);
 
 const sendHistory = () => {
@@ -311,8 +320,8 @@ setInterval(sendHistory, 100000);
 //sends most recent URL visited to the main document, editing the HTML file in the process
 
 const mostRecentURL = () => {
-    if (typeof document != undefined) {
-        document.getElementById("test").innerHTML = localStorage.getItem('numQuestions');
+    if (document !== undefined) {
+        document.getElementById("test").innerHTML = localStorage.getItem('numQuestions') ?? 0;
     }
 };
 mostRecentURL();

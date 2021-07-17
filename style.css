@@ -45,7 +45,7 @@ body
     linear-gradient(
       slategray, mintcream
     );
-    opacity: 0.2;
+    opacity: 0.4;
     transition-duration: 0.3s;
 
     border-radius: 2rem;
@@ -62,7 +62,7 @@ body
   linear-gradient(
     slategray, mintcream
   );
-  opacity: 0.35;
+  opacity: 0.5;
   transition-duration: 0.3s;
 }
 
