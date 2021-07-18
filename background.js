@@ -3,14 +3,14 @@
 let lastUrl = [];
 let lastTitle = [];
 
-localStorage.setItem('lastSearchTimeStorage',undefined)
+//localStorage.setItem('lastSearchTimeStorage',undefined)
 if (localStorage.getItem('lastSearchTimeStorage') === undefined) {
     localStorage.setItem('lastSearchTimeStorage',0);
 }
 
-localStorage.setItem('numQuestions', undefined);
+//localStorage.setItem('numQuestions', undefined);
 if (localStorage.getItem('numQuestions') === undefined) {
-    console.log("This must print");
+    console.log("numQuestions is undefined in the beginning");
     localStorage.setItem('numQuestions', 0);
 }
 
@@ -162,8 +162,8 @@ const numPunctuationMarks = () => {
             }            
         }
     }
-    console.log("amount of punctuation in searches:", sum);
-    console.log("punctuation distribution:", numPunctuation);
+    //console.log("amount of punctuation in searches:", sum);
+    //console.log("punctuation distribution:", numPunctuation);
 }
 
 /**
@@ -181,7 +181,7 @@ const avNumWrds = () => {
         sum += lastTitle[i].split(" ").length;
     }
     if (lastTitle.length > 0) {
-        console.log("average number of words:", sum / lastTitle.length);
+        //console.log("average number of words:", sum / lastTitle.length);
     }
 };
 
@@ -208,7 +208,7 @@ const timeSpent = () => {
         else {
             timeSpentUrl.set(hostname, 1);
         }
-        console.log(timeSpentUrl);
+        //console.log(timeSpentUrl);
         localStorage.setItem('timeSpentUrl', JSON.stringify(Array.from(timeSpentUrl.entries())));
     });
 };
@@ -226,7 +226,7 @@ const numSearches = () => {
 const numQuestionsAsked = () => {
     let oldNum = parseInt(localStorage.getItem('numQuestions'));
     if(Number.isNaN(oldNum)) {
-        console.log("must print out");
+        console.log("numQuestions is undefined in the function");
         oldNum = 0;        
     }
     console.log("oldNum:", oldNum);
@@ -245,16 +245,18 @@ const numQuestionsAsked = () => {
         "should",
         "would",
     ];
-    console.log(lastTitle.length);
     for (const i in lastTitle) {
+        console.log('word:',lastTitle[i])
         for (const j in qWords) {
             if (lastTitle[i].includes(qWords[j])) {
                 sum += 1;
             }
         }
     }
+    console.log('lastTitle:', lastTitle.length);
+    console.log('sum:', sum)
     localStorage.setItem('numQuestions', oldNum + sum);
-    console.log(oldNum, sum)
+    console.log('final num:', oldNum + sum)
 };
 
 /**
@@ -266,7 +268,7 @@ const numberThes = () => {
         sum += (lastTitle[i].match(/the/g) || []).length;
         //console.log(sum);
     }
-    console.log("The's: ", sum);
+    //console.log("The's: ", sum);
 };
 
 //setInterval(getAvgLength, 20000);
@@ -297,10 +299,11 @@ const getHistory = () => {
             });
         }
     );
-    //console.log(lasttitle.length);
+    /*
+    console.log(lasttitle.length);
     if (lastUrl.length != 0) {
         console.log(lastUrl[lastUrl.length - 1]);
-    }
+    }*/
 };
 
 //running get history once initially
