@@ -3,12 +3,10 @@
 let lastUrl = [];
 let lastTitle = [];
 
-//localStorage.setItem('lastSearchTimeStorage',undefined)
 if (localStorage.getItem('lastSearchTimeStorage') === undefined) {
     localStorage.setItem('lastSearchTimeStorage',0);
 }
 
-//localStorage.setItem('numQuestions', undefined);
 if (localStorage.getItem('numQuestions') === undefined) {
     console.log("numQuestions is undefined in the beginning");
     localStorage.setItem('numQuestions', 0);
@@ -16,8 +14,6 @@ if (localStorage.getItem('numQuestions') === undefined) {
 
 // check if we've already done the initial data grab
 // run the update loop for the stats
-
-  
 const mainLoopFunction = () =>  {
     let searchLength = 0;
     let numWords = 0;
@@ -250,6 +246,7 @@ const numQuestionsAsked = () => {
         for (const j in qWords) {
             if (lastTitle[i].includes(qWords[j])) {
                 sum += 1;
+                break;
             }
         }
     }
