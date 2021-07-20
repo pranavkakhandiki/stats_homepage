@@ -1,8 +1,14 @@
 //collects history (# determined by maxResults) and stores it in array
 let lastUrl = [];
 let lastTitle = [];
-if (typeof localStorage.getItem('lastSearchTimeStorage') == "undefined") {
-    localStorage.setItem('lastSearchTimeStorage', 0)
+
+if (localStorage.getItem('lastSearchTimeStorage') === undefined) {
+    localStorage.setItem('lastSearchTimeStorage',0);
+}
+
+if (localStorage.getItem('numQuestions') === undefined) {
+    console.log("numQuestions is undefined in the beginning");
+    localStorage.setItem('numQuestions', 0);
 }
 
 // check if we've already done the initial data grab
@@ -173,7 +179,6 @@ const numPunctuationMarksDistr = (lastTitle, index, numPunctuation) => {
  * Most used word
  */
 const mostUsedWord = () => {
-    
 }
 
 /**
@@ -185,7 +190,7 @@ const avNumWrds = () => {
         sum += lastTitle[i].split(" ").length;
     }
     if (lastTitle.length > 0) {
-        console.log("average number of words:", sum / lastTitle.length);
+        //console.log("average number of words:", sum / lastTitle.length);
     }
 };
 
@@ -212,7 +217,7 @@ const timeSpent = () => {
         else {
             timeSpentUrl.set(hostname, 1);
         }
-        console.log(timeSpentUrl);
+        //console.log(timeSpentUrl);
         localStorage.setItem('timeSpentUrl', JSON.stringify(Array.from(timeSpentUrl.entries())));
     });
 };
@@ -228,6 +233,13 @@ const numSearches = () => {
  * Gets number of questions asked for google searches
  */
 const numQuestionsAsked = () => {
+    let oldNum = parseInt(localStorage.getItem('numQuestions'));
+    if(Number.isNaN(oldNum)) {
+        console.log("numQuestions is undefined in the function");
+        oldNum = 0;        
+    }
+    console.log("oldNum:", oldNum);
+
     let sum = 0;
     let qWords = [
         "?",
@@ -242,15 +254,19 @@ const numQuestionsAsked = () => {
         "should",
         "would",
     ];
-
     for (const i in lastTitle) {
+        console.log('word:',lastTitle[i])
         for (const j in qWords) {
             if (lastTitle[i].includes(qWords[j])) {
                 sum += 1;
+                break;
             }
         }
     }
-    localStorage.setItem('numQuestions', sum);
+    console.log('lastTitle:', lastTitle.length);
+    console.log('sum:', sum)
+    localStorage.setItem('numQuestions', oldNum + sum);
+    console.log('final num:', oldNum + sum)
 };
 
 /**
@@ -262,7 +278,7 @@ const numberThes = () => {
         sum += (lastTitle[i].match(/the/g) || []).length;
         //console.log(sum);
     }
-    console.log("The's: ", sum);
+    //console.log("The's: ", sum);
 };
 
 //setInterval(getAvgLength, 20000);
@@ -277,35 +293,31 @@ setInterval(numPunctuationMarks, 10000);
 
 
 const getHistory = () => {
-    //lasturl = [];
-    lastTitle = [];
-    console.log(localStorage.getItem('lastSearchTimeStorage'));
+    lastTitle = []
     chrome.history.search(
         { text: "", startTime: parseInt(localStorage.getItem('lastSearchTimeStorage')), maxResults: 1000000000 },
         function (data) {
-            let i = 0;
             if(data[0] != undefined){
                 localStorage.setItem('lastSearchTimeStorage', data[0].lastVisitTime + 1);
             }
             data.forEach((page) => {
-                i += 1;
                 lastUrl.push(page.url);
                 //adds only defined page titles that are regular google searches (like 'what is the weather') to array
                 if (page.title != undefined && page.title.endsWith("Google Search")) {
                     lastTitle.push(page.title);
                 }
             });
-            console.log(i);
         }
     );
-    //console.log(lasttitle.length);
+    /*
+    console.log(lasttitle.length);
     if (lastUrl.length != 0) {
         console.log(lastUrl[lastUrl.length - 1]);
-    }
+    }*/
 };
 
 //running get history once initially
-//getHistory();
+getHistory();
 setInterval(getHistory, 10000);
 
 const sendHistory = () => {
@@ -321,8 +333,8 @@ setInterval(sendHistory, 100000);
 //sends most recent URL visited to the main document, editing the HTML file in the process
 
 const mostRecentURL = () => {
-    if (typeof document != undefined) {
-        document.getElementById("test").innerHTML = localStorage.getItem('numQuestions');
+    if (document !== undefined) {
+        document.getElementById("test").innerHTML = localStorage.getItem('numQuestions') ?? 0;
     }
 };
 mostRecentURL();
