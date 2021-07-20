@@ -1,21 +1,21 @@
 //collects history (# determined by maxResults) and stores it in array
-
 let lastUrl = [];
 let lastTitle = [];
 if (typeof localStorage.getItem('lastSearchTimeStorage') == "undefined") {
-    localStorage.setItem('lastSearchTimeStorage',0)
+    localStorage.setItem('lastSearchTimeStorage', 0)
 }
 
 // check if we've already done the initial data grab
 // run the update loop for the stats
-
-  
 const mainLoopFunction = () =>  {
     let searchLength = 0;
     let numWords = 0;
     let distrWords = new Map();
     let numLetters = 0;
     let distrLetters = new Map();
+    let distrNums = new Map();
+    let numPunctuation = 0;
+    let distrPunctuation = new Map();
 
     for (let i in lastTitle) {
         //google search length
@@ -24,6 +24,9 @@ const mainLoopFunction = () =>  {
         distrWords = numWordsSearchedDistribution(lastTitle, i, numWords);
         numLetters += numLettersSearched(lastTitle, i);
         distrLetters = numLettersSearchedDistribution(lastTitle, i, distrLetters);
+        distrNums = numNumsSearched(lastTitle, i, distrNums);
+        numPunctuation += numPunctuationMarks(lastTitle, i);
+        distrPunctuation = numPunctuationMarksDistr(lastTitle, i, distrPunctuation);
     }
     let avgSearchLength = searchLength/lastTitle[i].length;
 };
@@ -134,30 +137,37 @@ const numNumsSearched = (lastTitle, i, numNums) => {
  * Number of times punctuation was used in a sentence
  */
 
-const numPunctuationMarks = () => {
-    let numPunctuation = new Map();
+const numPunctuationMarks = (lastTitle, index) => {
     let sum = 0;
     const punctuation = '!"#$%&\'()*+,-./:;<=>?@[]\\^_`{|}~';
-    for (const index in lastTitle) {
-        var lastsearch = lastTitle[index];
-        lastsearch = lastsearch.replace("Google Search", "");
-        for (var i = 0; i < lastsearch.length; i++) {
-            let char = lastsearch.charAt(i);
-            if (punctuation.includes(char)) {
-                sum += 1;
-                if (numPunctuation.has(char)) {
-                    numPunctuation.set(char, numPunctuation.get(char) + 1);
-                }
-                else {
-                    numPunctuation.set(char, 1);
-                }
-            }            
-        }
+    var lastsearch = lastTitle[index];
+    lastsearch = lastsearch.replace("Google Search", "");
+    for (var i = 0; i < lastsearch.length; i++) {
+        let char = lastsearch.charAt(i);
+        if (punctuation.includes(char)) {
+            sum += 1;
+        }            
     }
-    console.log("amount of punctuation in searches:", sum);
-    console.log("punctuation distribution:", numPunctuation);
+    return sum;
 }
 
+const numPunctuationMarksDistr = (lastTitle, index, numPunctuation) => {
+    const punctuation = '!"#$%&\'()*+,-./:;<=>?@[]\\^_`{|}~';
+    var lastsearch = lastTitle[index];
+    lastsearch = lastsearch.replace("Google Search", "");
+    for (var i = 0; i < lastsearch.length; i++) {
+        let char = lastsearch.charAt(i);
+        if (punctuation.includes(char)) {
+            if (numPunctuation.has(char)) {
+                numPunctuation.set(char, numPunctuation.get(char) + 1);
+            }
+            else {
+                numPunctuation.set(char, 1);
+            }
+        }            
+    }
+    return numPunctuation;
+}
 
 /**
  * Most used word
