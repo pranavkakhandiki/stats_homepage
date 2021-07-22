@@ -1,30 +1,88 @@
 //collects history (# determined by maxResults) and stores it in array
 let lastUrl = [];
 let lastTitle = [];
+let timeSpentDict = {};
 
-if (localStorage.getItem('lastSearchTimeStorage') === undefined) {
-    localStorage.setItem('lastSearchTimeStorage',0);
-}
+/*All Stats
+-getAvgLength: 
+-numWordsSearched
+-numWordsSearchedDistribution
+-numLettersSearched
+-numNumsSearched
+-numPunctuationMarks
+-numPunctuationMarksDistr
+-timeSpent
+-numQuestionsAsked
+-numberThes
+-numSearches
+*/
 
-if (localStorage.getItem('numQuestions') === undefined) {
-    console.log("numQuestions is undefined in the beginning");
-    localStorage.setItem('numQuestions', 0);
+/* CHRIS TO DO LIST DO NOT DELETE
+migrate all stats
+localStorage update stats
+document stats in dailyStat
+*/
+
+
+//Format: Function Name, String before, String after stat
+let dailyStat = [
+    ['searchLength', 'The average length of all your past google searches is', '' ],
+    ['numWords', 'You have used ', 'words in your past google searches'],
+    //['distrWords', ],
+    ['numLettersSearched','You have used ', ' letters in your past google searches' ],
+    ['numLetters', 'You have used ', ' numbers in your past google searches'],
+    ['numPunctuation', 'You have used ', ' punctuation marks in your google searches'],
+    ['timeSpentOnYoutube', 'The most amount of time you have spent on a single tab is ', ' hours'  ],
+    ['numQuestions', 'You have asked ', ' questions in your past google searches' ],
+    ['numberThes', "You have used the word 'the' ", ' times in your google searches'],
+    ['numSearches', 'You have made', ' google searches in total']
+];
+
+
+
+
+
+
+
+
+const generateLocalStorageObjects = (name, initialVal) =>  {
+    if (localStorage.getItem(name) === undefined) {
+        localStorage.setItem(name, initialVal);
+    }
 }
+generateLocalStorageObjects('lastSearchTimeStorage', 0);
+generateLocalStorageObjects('numQuestions', 0);
+generateLocalStorageObjects('searchLength', 0);
+generateLocalStorageObjects('numWords', 0);
+let tempmap = new Map();
+generateLocalStorageObjects('distrWords', JSON.stringify(tempmap));
+generateLocalStorageObjects('numLetters', 0);
+tempmap = new Map();
+generateLocalStorageObjects('distrLetters', JSON.stringify(tempmap));
+tempmap = new Map();
+generateLocalStorageObjects('distrNums', JSON.stringify(tempmap));
+generateLocalStorageObjects('numPunctuation', 0);
+tempmap = new Map();
+generateLocalStorageObjects('distrPunctuation', JSON.stringify(tempmap));
+generateLocalStorageObjects('numberThe', 0);
 
 // check if we've already done the initial data grab
 // run the update loop for the stats
 const mainLoopFunction = () =>  {
-    let searchLength = 0;
-    let numWords = 0;
-    let distrWords = new Map();
-    let numLetters = 0;
-    let distrLetters = new Map();
-    let distrNums = new Map();
-    let numPunctuation = 0;
-    let distrPunctuation = new Map();
-
+    let numQuestions = localStorage.getItem('numQuestions');
+    let searchLength = localStorage.getItem('searchLength');
+    let numWords = localStorage.getItem('numWords');
+    let distrWords= new Map(JSON.parse(localStorage.getItem('distrWords')));
+    let numLetters = localStorage.getItem('numLetters');
+    let distrLetters = new Map(JSON.parse(localStorage.getItem('distrLetters')));
+    let distrNums = new Map(JSON.parse(localStorage.getItem('distrNums')));
+    let numPunctuation = localStorage.getItem('numPunctuation');
+    let distrPunctuation = new Map(JSON.parse(localStorage.getItem('distrPunctuation')));
+    let timeSpentOnYoutube = 0.0;
+    let numberThe = localStorage.getItem('numberThe');
     for (let i in lastTitle) {
         //google search length
+        numQuestions += numQuestionsAsked(lastTitle, i);
         searchLength += getAvgLength(lastTitle, i);
         numWords += numWordsSearched(lastTitle, i);
         distrWords = numWordsSearchedDistribution(lastTitle, i, numWords);
@@ -33,9 +91,32 @@ const mainLoopFunction = () =>  {
         distrNums = numNumsSearched(lastTitle, i, distrNums);
         numPunctuation += numPunctuationMarks(lastTitle, i);
         distrPunctuation = numPunctuationMarksDistr(lastTitle, i, distrPunctuation);
+        timeSpentOnYoutube += timeSpentYT(timeSpentDict);
+        numberThe += numberThes(lastTitle, i);
     }
-    let avgSearchLength = searchLength/lastTitle[i].length;
+    let avgSearchLength = searchLength/lastTitle.length;
+    let avNumWords = numWords/lastTitle.length;
+    let numSearches = lastTitle.length;
 };
+setInterval(mainLoopFunction, 10000);
+
+
+/**
+ * Gets number of questions asked for google searches
+ */
+const numQuestionsAsked = (lastTitle, i) => {
+    let qWords = [
+        "?",  "who", "what", "where", "when", "why",
+        "how", "can", "could", "should", "would",
+    ];
+    for (const j in qWords) {
+        if (lastTitle[i].includes(qWords[j])) {
+            return 1;
+        }
+    }
+    return 0;
+};
+
 /**
  * Gets average length of google searches
  */
@@ -43,11 +124,40 @@ const getAvgLength = (lastTitle, i) => {
     return lastTitle[i].length;
 };
 
+/**
+ * Check for time spent on Youtube since creating the extension
+ */
+const timeSpentYT = (timeSpentDict) => {
+    console.log(timeSpentDict["youtube.com"]);
+    return timeSpentDict["youtube.com"];
+};
+
+//setInterval(timeSpentYT, 1000);
+
+
+
 /** TO BE DONE
  * Number of searches done per day/per hour
  */
 
-// TO BE DONE - make everything in one loop
+const numQuestions = (lastTitle, i) => {
+    let qWords = [
+        "?", "who", "what",
+        "where", "when", "why",
+        "how", "can", "could", 
+        "should", "would"
+    ];
+    console.log('word:',lastTitle[i])
+    for (const j in qWords) {
+        if (lastTitle[i].includes(qWords[j])) {
+            return 1;
+        }
+    }
+    return 0;
+};
+
+
+
 
 /** DO NOW
  * Number of words searched
@@ -176,31 +286,13 @@ const numPunctuationMarksDistr = (lastTitle, index, numPunctuation) => {
 }
 
 /**
- * Most used word
- */
-const mostUsedWord = () => {
-}
-
-/**
- * Finds average number of words in a search
- */
-const avNumWrds = () => {
-    let sum = 0;
-    for (const i in lastTitle) {
-        sum += lastTitle[i].split(" ").length;
-    }
-    if (lastTitle.length > 0) {
-        //console.log("average number of words:", sum / lastTitle.length);
-    }
-};
-
-/**
  * Most Time Spent On URLs
  * ADD - ADD A DATE COMPONENT FOR THE DICTIONARY
  */
 const timeSpent = () => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         if (tabs.length === 0) {
+            console.log("In TimeSpent but not in the right if statement");
             return;
         }
         let timeSpentUrl;
@@ -217,74 +309,23 @@ const timeSpent = () => {
         else {
             timeSpentUrl.set(hostname, 1);
         }
-        //console.log(timeSpentUrl);
-        localStorage.setItem('timeSpentUrl', JSON.stringify(Array.from(timeSpentUrl.entries())));
+        console.log("In TimeSpent");
+        localStorage.setItem('timeSpentUrl', JSON.stringify(timeSpentUrl.entries()));
+        timeSpentDict = timeSpentUrl;
     });
 };
 
-/**
- * Gets number of google searches
- */
-const numSearches = () => {
-    return lastTitle.length;
-};
-
-/**
- * Gets number of questions asked for google searches
- */
-const numQuestionsAsked = () => {
-    let oldNum = parseInt(localStorage.getItem('numQuestions'));
-    if(Number.isNaN(oldNum)) {
-        console.log("numQuestions is undefined in the function");
-        oldNum = 0;        
-    }
-    console.log("oldNum:", oldNum);
-
-    let sum = 0;
-    let qWords = [
-        "?",
-        "who",
-        "what",
-        "where",
-        "when",
-        "why",
-        "how",
-        "can",
-        "could",
-        "should",
-        "would",
-    ];
-    for (const i in lastTitle) {
-        console.log('word:',lastTitle[i])
-        for (const j in qWords) {
-            if (lastTitle[i].includes(qWords[j])) {
-                sum += 1;
-                break;
-            }
-        }
-    }
-    console.log('lastTitle:', lastTitle.length);
-    console.log('sum:', sum)
-    localStorage.setItem('numQuestions', oldNum + sum);
-    console.log('final num:', oldNum + sum)
-};
 
 /**
  * Gets number of instances of 'the' in google searhces
  */
-const numberThes = () => {
-    let sum = 0;
-    for (const i in lastTitle) {
-        sum += (lastTitle[i].match(/the/g) || []).length;
-        //console.log(sum);
-    }
-    //console.log("The's: ", sum);
-};
+const numberThes = (lastTitle, i) => {
+    return (lastTitle[i].match(/the/g) || []).length;
+}
 
 //setInterval(getAvgLength, 20000);
 setInterval(numberThes, 10000);
 setInterval(numQuestionsAsked, 10000);
-setInterval(avNumWrds, 10000);
 //setInterval(numNumsSearched, 10000);
 //setInterval(numLettersSearched, 10000);
 setInterval(timeSpent, 1000); // Should increment this to like 30 seconds or 1 minute
@@ -323,7 +364,7 @@ setInterval(getHistory, 10000);
 const sendHistory = () => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         if (tabs.length > 0) {
-            chrome.tabs.sendMessage(tabs[0].id, mostRecentURL);
+            chrome.tabs.sendMessage(tabs[0].id, displayStat);
             //lasturl = [];
         }
     });
@@ -332,10 +373,19 @@ setInterval(sendHistory, 100000);
 
 //sends most recent URL visited to the main document, editing the HTML file in the process
 
-const mostRecentURL = () => {
+const displayStat = () => {
+    console.log(dailyStat);
+    let rand = Math.random();
+    rand *= dailyStat.length;
+    rand = Math.floor(rand);
+    
+
+    let sentence = dailyStat[rand][1] + localStorage.getItem(dailyStat[rand][0]) + dailyStat[rand][2];
+    console.log("SENTENCE", sentence);
     if (document !== undefined) {
-        document.getElementById("test").innerHTML = localStorage.getItem('numQuestions') ?? 0;
+        //document.getElementById("test").innerHTML = localStorage.getItem('numQuestions') ?? 0;
+        document.getElementById("test").innerHTML = sentence;
     }
 };
-mostRecentURL();
-setInterval(mostRecentURL, 10000);
+displayStat();
+setInterval(displayStat, 10000);
