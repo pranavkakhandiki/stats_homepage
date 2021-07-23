@@ -28,7 +28,6 @@ document stats in dailyStat
 let dailyStat = [
     ['searchLength', 'The average length of all your past google searches is', '' ],
     ['numWords', 'You have used ', 'words in your past google searches'],
-    //['distrWords', ],
     ['numLettersSearched','You have used ', ' letters in your past google searches' ],
     ['numLetters', 'You have used ', ' numbers in your past google searches'],
     ['numPunctuation', 'You have used ', ' punctuation marks in your google searches'],
@@ -94,6 +93,20 @@ const mainLoopFunction = () =>  {
         timeSpentOnYoutube += timeSpentYT(timeSpentDict);
         numberThe += numberThes(lastTitle, i);
     }
+    localStorage.setItem('numQuestions', numQuestions);
+    localStorage.setItem('searchLength', searchLength);
+    localStorage.setItem('numWords', numWords);
+    localStorage.setItem('distrWords', JSON.stringify(distrWords));
+    localStorage.setItem('numLetters', numLetters);
+    localStorage.setItem('distrLetters', JSON.stringify(distrLetters));
+    localStorage.setItem('distrNums', JSON.stringify(distrNums));
+    localStorage.setItem('numPunctuation', numPunctuation);
+    localStorage.setItem('distrPunctuation', JSON.stringify(distrPunctuation));
+    localStorage.setItem('timeSpentOnYoutube', timeSpentOnYoutube);
+    localStorage.setItem('numberThe', numberThe);
+
+
+
     let avgSearchLength = searchLength/lastTitle.length;
     let avNumWords = numWords/lastTitle.length;
     let numSearches = lastTitle.length;
@@ -110,6 +123,7 @@ const numQuestionsAsked = (lastTitle, i) => {
         "how", "can", "could", "should", "would",
     ];
     for (const j in qWords) {
+        console.log(lastTitle);
         if (lastTitle[i].includes(qWords[j])) {
             return 1;
         }
@@ -334,7 +348,7 @@ setInterval(numPunctuationMarks, 10000);
 
 
 const getHistory = () => {
-    lastTitle = []
+    lastTitle = [];
     chrome.history.search(
         { text: "", startTime: parseInt(localStorage.getItem('lastSearchTimeStorage')), maxResults: 1000000000 },
         function (data) {
@@ -387,5 +401,5 @@ const displayStat = () => {
         document.getElementById("test").innerHTML = sentence;
     }
 };
-displayStat();
+//displayStat();
 setInterval(displayStat, 10000);
