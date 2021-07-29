@@ -3,6 +3,9 @@ let lastUrl = [];
 let lastTitle = [];
 let timeSpentDict = {};
 
+
+
+
 /*All Stats
 -getAvgLength: 
 -numWordsSearched
@@ -37,11 +40,27 @@ let dailyStat = [
     ['numSearches', 'You have made', ' google searches in total']
 ];
 
-
-
-
-
-
+let comparisons = [
+    [0, 'Number of Alien Civilizations Found', 'alien.jpg'],
+    [1, 'Number of Known Intelligent Species in the Universe', 'universe.jpg'],
+    [2, 'Number of Years Pineapples Take to Grow', 'pineapple.jpg'],
+    [5, 'Number of Oceans', 'ocean.jpg'],
+    [7, 'Height of Colossus Penguin (37 million years ago)','penguin.jpg'],
+    [9, 'Number of Species', 'species.jpg'],
+    [14, 'Height of Olympus Mons on Mars in Miles', 'mars.jpg'],
+    [17, 'Number of Hours Cats Sleep per Day', 'cat.jpg'],
+    [20, 'Number of Slams Won by Federer', 'tennis.jpg'],
+    [36, "Number of US Adults that Can't Read Above a 3rd Grade Level in Millions", 'read.jpg'],
+    [80, 'Percent of Ocean Unexplored', 'ocean.jpg'],
+    [125, 'Number of Galaxies in Observable Universe in Billions', 'galaxy.jpg'],
+    [178, 'Number of Seeds on McDonalds Bun', 'burger.jpg'],
+    [195, 'Number of Countries', 'countries.jpg'],
+    [1942, 'Year the Atomic Bomb was Developed', 'bomb.jpg'],
+    [6500, 'Number of Languages', 'language.jpg'],
+    [11034, 'Depth of the Mariana Trench', 'trench.jpg'],
+    [29032, 'Height of Mount Everest', 'everest1.jpg'],
+    [86000000000, 'Number of Neurons in Brain', 'neuron.jpg'],
+];
 
 
 const generateLocalStorageObjects = (name, initialVal) =>  {
@@ -388,6 +407,22 @@ setInterval(sendHistory, 100000);
 //sends most recent URL visited to the main document, editing the HTML file in the process
 
 const displayStat = () => {
+
+    let background_image = "";
+    let test_num = localStorage.getItem('numQuestions');
+    for (let i = 0; i < comparisons.length-1; i++){
+        if (Math.abs(test_num - comparisons[i][0]) <= Math.abs(test_num - comparisons[i+1][0])){
+            background_image = comparisons[i][2];
+            break;
+        }
+    }
+    
+    //document.getElementById("test").innerHTML = "YO";
+    window.onload = function () {
+        console.log(background_image);
+        document.getElementById('image').src = "assets/" + background_image;
+    }
+    
     console.log(dailyStat);
     let rand = Math.random();
     rand *= dailyStat.length;
@@ -395,11 +430,17 @@ const displayStat = () => {
     
 
     let sentence = dailyStat[rand][1] + localStorage.getItem(dailyStat[rand][0]) + dailyStat[rand][2];
+
+    //match up with a corresponding html image
+    //document.getElementById('image').src = "assets/ksi.jpg";
+    
+
+
     console.log("SENTENCE", sentence);
     if (document !== undefined) {
         //document.getElementById("test").innerHTML = localStorage.getItem('numQuestions') ?? 0;
         document.getElementById("test").innerHTML = sentence;
     }
 };
-//displayStat();
+displayStat();
 setInterval(displayStat, 10000);
