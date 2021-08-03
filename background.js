@@ -1,4 +1,5 @@
 //collects history (# determined by maxResults) and stores it in array
+
 let lastUrl = [];
 let lastTitle = [];
 let timeSpentDict = {};
@@ -45,7 +46,10 @@ let dailyStat = [
 
 
 const generateLocalStorageObjects = (name, initialVal) =>  {
-    if (localStorage.getItem(name) === undefined) {
+    console.log("YOYOOYOYOYOYOOY MPMPMPMPPMPPMMP");
+    console.log(localStorage.getItem(name));
+    if (localStorage.getItem(name) === null) {
+        console.log("LALALLALALALALALAL MPMPMPMPPMPPMMP");
         localStorage.setItem(name, initialVal);
     }
 }
@@ -68,9 +72,14 @@ generateLocalStorageObjects('numberThe', 0);
 // check if we've already done the initial data grab
 // run the update loop for the stats
 const mainLoopFunction = () =>  {
+    console.log("UR MOM");
+
     let numQuestions = localStorage.getItem('numQuestions');
+    console.log(numQuestions);
     let searchLength = localStorage.getItem('searchLength');
+    console.log(searchLength);
     let numWords = localStorage.getItem('numWords');
+    console.log(numWords);
     let distrWords= new Map(JSON.parse(localStorage.getItem('distrWords')));
     let numLetters = localStorage.getItem('numLetters');
     let distrLetters = new Map(JSON.parse(localStorage.getItem('distrLetters')));
@@ -79,6 +88,10 @@ const mainLoopFunction = () =>  {
     let distrPunctuation = new Map(JSON.parse(localStorage.getItem('distrPunctuation')));
     let timeSpentOnYoutube = 0.0;
     let numberThe = localStorage.getItem('numberThe');
+    console.log(lastTitle);
+    
+    console.log(lastTitle);
+
     for (let i in lastTitle) {
         //google search length
         numQuestions += numQuestionsAsked(lastTitle, i);
@@ -93,17 +106,17 @@ const mainLoopFunction = () =>  {
         timeSpentOnYoutube += timeSpentYT(timeSpentDict);
         numberThe += numberThes(lastTitle, i);
     }
-    localStorage.setItem('numQuestions', numQuestions);
-    localStorage.setItem('searchLength', searchLength);
-    localStorage.setItem('numWords', numWords);
-    localStorage.setItem('distrWords', JSON.stringify(distrWords));
-    localStorage.setItem('numLetters', numLetters);
-    localStorage.setItem('distrLetters', JSON.stringify(distrLetters));
-    localStorage.setItem('distrNums', JSON.stringify(distrNums));
-    localStorage.setItem('numPunctuation', numPunctuation);
-    localStorage.setItem('distrPunctuation', JSON.stringify(distrPunctuation));
-    localStorage.setItem('timeSpentOnYoutube', timeSpentOnYoutube);
-    localStorage.setItem('numberThe', numberThe);
+    // localStorage.setItem('numQuestions', numQuestions);
+    // localStorage.setItem('searchLength', searchLength);
+    // localStorage.setItem('numWords', numWords);
+    // localStorage.setItem('distrWords', JSON.stringify(distrWords));
+    // localStorage.setItem('numLetters', numLetters);
+    // localStorage.setItem('distrLetters', JSON.stringify(distrLetters));
+    // localStorage.setItem('distrNums', JSON.stringify(distrNums));
+    // localStorage.setItem('numPunctuation', numPunctuation);
+    // localStorage.setItem('distrPunctuation', JSON.stringify(distrPunctuation));
+    // localStorage.setItem('timeSpentOnYoutube', timeSpentOnYoutube);
+    // localStorage.setItem('numberThe', numberThe);
 
 
 
@@ -356,14 +369,22 @@ const getHistory = () => {
                 localStorage.setItem('lastSearchTimeStorage', data[0].lastVisitTime + 1);
             }
             data.forEach((page) => {
+                console.log(page.url);
                 lastUrl.push(page.url);
                 //adds only defined page titles that are regular google searches (like 'what is the weather') to array
-                if (page.title != undefined && page.title.endsWith("Google Search")) {
-                    lastTitle.push(page.title);
+                if (page.title != undefined) {
+                    console.log("AGAGAGAGAGAG");
+                    if (page.title.endsWith("Google Search")) {
+                        console.log("APAPAPAPA  ", page.title);
+                        lastTitle.push(page.title);
+                    }
+            
                 }
             });
         }
     );
+    console.log(lastTitle);
+
     /*
     console.log(lasttitle.length);
     if (lastUrl.length != 0) {
@@ -401,5 +422,5 @@ const displayStat = () => {
         document.getElementById("test").innerHTML = sentence;
     }
 };
-//displayStat();
+displayStat();
 setInterval(displayStat, 10000);
