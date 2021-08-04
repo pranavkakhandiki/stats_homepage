@@ -75,7 +75,8 @@ const generateLocalStorageObjects = (name, initialVal) =>  {
     }
 }
 generateLocalStorageObjects('lastSearchTimeStorage', 0);
-generateLocalStorageObjects('numQuestions', 0);
+//generateLocalStorageObjects('numQuestions', 0);
+
 generateLocalStorageObjects('searchLength', 0);
 generateLocalStorageObjects('numWords', 0);
 let tempmap = new Map();
@@ -142,18 +143,40 @@ setInterval(mainLoopFunction, 10000);
 /**
  * Gets number of questions asked for google searches
  */
-const numQuestionsAsked = (lastTitle, i) => {
+ const numQuestionsAsked = () => {
+    let oldNum = parseInt(localStorage.getItem('numQuestions'));
+    if(Number.isNaN(oldNum)) {
+        console.log("numQuestions is undefined in the function");
+        oldNum = 0;        
+    }
+    console.log("oldNum:", oldNum);
+    let sum = 0;
     let qWords = [
-        "?",  "who", "what", "where", "when", "why",
-        "how", "can", "could", "should", "would",
+        "?",
+        "who",
+        "what",
+        "where",
+        "when",
+        "why",
+        "how",
+        "can",
+        "could",
+        "should",
+        "would",
     ];
-    for (const j in qWords) {
-        console.log(lastTitle);
-        if (lastTitle[i].includes(qWords[j])) {
-            return 1;
+    for (const i in lastTitle) {
+        console.log('word:',lastTitle[i])
+        for (const j in qWords) {
+            if (lastTitle[i].includes(qWords[j])) {
+                sum += 1;
+                break;
+            }
         }
     }
-    return 0;
+    console.log('lastTitle:', lastTitle.length);
+    console.log('sum:', sum)
+    localStorage.setItem('numQuestions', oldNum + sum);
+    console.log('final num:', oldNum + sum)
 };
 
 /**
@@ -179,21 +202,21 @@ const timeSpentYT = (timeSpentDict) => {
  * Number of searches done per day/per hour
  */
 
-const numQuestions = (lastTitle, i) => {
-    let qWords = [
-        "?", "who", "what",
-        "where", "when", "why",
-        "how", "can", "could", 
-        "should", "would"
-    ];
-    console.log('word:',lastTitle[i])
-    for (const j in qWords) {
-        if (lastTitle[i].includes(qWords[j])) {
-            return 1;
-        }
-    }
-    return 0;
-};
+// const numQuestions = (lastTitle, i) => {
+//     let qWords = [
+//         "?", "who", "what",
+//         "where", "when", "why",
+//         "how", "can", "could", 
+//         "should", "would"
+//     ];
+//     console.log('word:',lastTitle[i])
+//     for (const j in qWords) {
+//         if (lastTitle[i].includes(qWords[j])) {
+//             return 1;
+//         }
+//     }
+//     return 0;
+// };
 
 
 
@@ -305,6 +328,8 @@ const numPunctuationMarks = (lastTitle, index) => {
     }
     return sum;
 }
+
+
 
 const numPunctuationMarksDistr = (lastTitle, index, numPunctuation) => {
     const punctuation = '!"#$%&\'()*+,-./:;<=>?@[]\\^_`{|}~';
@@ -439,6 +464,8 @@ const displayStat = () => {
     let sentence = dailyStat[rand_stat][1] + localStorage.getItem(dailyStat[rand_stat][0]) + dailyStat[rand_stat][2] + ". "
     + prefixes[rand_prefix][0] + comparisons[index][1] + ".";
 
+    let url = dailyStat[rand_stat][3];
+
     //match up with a corresponding html image
     //document.getElementById('image').src = "assets/ksi.jpg";
     
@@ -448,6 +475,7 @@ const displayStat = () => {
     if (document !== undefined) {
         //document.getElementById("test").innerHTML = localStorage.getItem('numQuestions') ?? 0;
         document.getElementById("test").innerHTML = sentence;
+        document.getElementById("URL").href = url;
     }
 };
 displayStat();
