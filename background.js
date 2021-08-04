@@ -27,6 +27,8 @@ document stats in dailyStat
 */
 
 
+
+
 //Format: Function Name, String before, String after stat
 let dailyStat = [
     ['searchLength', 'The average length of all your past google searches is', '' ],
@@ -41,25 +43,29 @@ let dailyStat = [
 ];
 
 let comparisons = [
-    [0, 'Number of Alien Civilizations Found', 'alien.jpg'],
-    [1, 'Number of Known Intelligent Species in the Universe', 'universe.jpg'],
-    [2, 'Number of Years Pineapples Take to Grow', 'pineapple.jpg'],
-    [5, 'Number of Oceans', 'ocean.jpg'],
-    [7, 'Height of Colossus Penguin (37 million years ago)','penguin.jpg'],
-    [9, 'Number of Species', 'species.jpg'],
-    [14, 'Height of Olympus Mons on Mars in Miles', 'mars.jpg'],
-    [17, 'Number of Hours Cats Sleep per Day', 'cat.jpg'],
-    [20, 'Number of Slams Won by Federer', 'tennis.jpg'],
-    [36, "Number of US Adults that Can't Read Above a 3rd Grade Level in Millions", 'read.jpg'],
-    [80, 'Percent of Ocean Unexplored', 'ocean.jpg'],
-    [125, 'Number of Galaxies in Observable Universe in Billions', 'galaxy.jpg'],
-    [178, 'Number of Seeds on McDonalds Bun', 'burger.jpg'],
-    [195, 'Number of Countries', 'countries.jpg'],
-    [1942, 'Year the Atomic Bomb was Developed', 'bomb.jpg'],
-    [6500, 'Number of Languages', 'language.jpg'],
-    [11034, 'Depth of the Mariana Trench', 'trench.jpg'],
-    [29032, 'Height of Mount Everest', 'everest1.jpg'],
-    [86000000000, 'Number of Neurons in Brain', 'neuron.jpg'],
+    [0, 'number of alien civilizations found', 'alien.jpg', 'https://en.wikipedia.org/wiki/Extraterrestrial_life'],
+    [1, 'number of known intelligent species in the universe', 'universe.jpg', 'https://en.wikipedia.org/wiki/Extraterrestrial_intelligence'],
+    [2, 'number of years pineapples take to grow', 'pineapple.jpg', 'https://en.wikipedia.org/wiki/Pineapple'],
+    [5, 'number of oceans', 'ocean.jpg', 'https://en.wikipedia.org/wiki/Ocean'],
+    [7, 'height of Colossus Penguin (37 million years ago)','penguin.jpg', 'https://en.wikipedia.org/wiki/Palaeeudyptes_klekowskii'],
+    [9, 'number of species', 'species.jpg', 'https://en.wikipedia.org/wiki/Global_biodiversity'],
+    [14, 'height of Olympus Mons on Mars in miles', 'mars.jpg', 'https://en.wikipedia.org/wiki/Olympus_Mons'],
+    [17, 'number of hours cats sleep per day', 'cat.jpg', 'https://en.wikipedia.org/wiki/Cat'],
+    [20, 'number of slams won by Federer', 'tennis.jpg', 'https://en.wikipedia.org/wiki/Roger_Federer'],
+    [36, "number of adults from USA that can't read above a 3rd grade level(millions)", 'read.jpg', 'https://en.wikipedia.org/wiki/Functional_illiteracy'],
+    [80, 'percent of ocean unexplored', 'ocean.jpg', 'https://en.wikipedia.org/wiki/Ocean'],
+    [125, 'number of galaxies in observable universe in billions', 'galaxy.jpg', 'https://en.wikipedia.org/wiki/Galaxy'],
+    [178, 'number of seeds on McDonalds Bbn', 'burger.jpg', 'https://en.wikipedia.org/wiki/McDonald%27s'],
+    [195, 'number of countries', 'countries.jpg', 'https://en.wikipedia.org/wiki/Country'],
+    [1942, 'year the atomic bomb was developed', 'bomb.jpg', 'https://en.wikipedia.org/wiki/Nuclear_weapon'],
+    [6500, 'number of spoken languages ', 'language.jpg', 'https://en.wikipedia.org/wiki/List_of_languages_by_number_of_native_speakers'],
+    [11034, 'depth of the Mariana Trench in meters', 'trench.jpg', 'https://en.wikipedia.org/wiki/Mount_Everest'],
+    [29032, 'height of Mount Everest in feet', 'everest1.jpg', 'https://en.wikipedia.org/wiki/Mount_Everest'],
+    [86000000000, 'number of neurons in a human brain', 'neuron.jpg', 'https://en.wikipedia.org/wiki/Neuron'],
+];
+
+let prefixes = [
+    ["That's the "]
 ];
 
 
@@ -407,29 +413,31 @@ setInterval(sendHistory, 100000);
 //sends most recent URL visited to the main document, editing the HTML file in the process
 
 const displayStat = () => {
-
+    
+    let index = 0;
     let background_image = "";
     let test_num = localStorage.getItem('numQuestions');
     for (let i = 0; i < comparisons.length-1; i++){
         if (Math.abs(test_num - comparisons[i][0]) <= Math.abs(test_num - comparisons[i+1][0])){
             background_image = comparisons[i][2];
+            index = i;
             break;
         }
     }
     
     //document.getElementById("test").innerHTML = "YO";
     window.onload = function () {
-        console.log(background_image);
         document.getElementById('image').src = "assets/" + background_image;
+        
     }
     
     console.log(dailyStat);
-    let rand = Math.random();
-    rand *= dailyStat.length;
-    rand = Math.floor(rand);
     
+    let rand_stat = Math.floor(Math.random() * dailyStat.length);
+    let rand_prefix = Math.floor(Math.random() * prefixes.length);
 
-    let sentence = dailyStat[rand][1] + localStorage.getItem(dailyStat[rand][0]) + dailyStat[rand][2];
+    let sentence = dailyStat[rand_stat][1] + localStorage.getItem(dailyStat[rand_stat][0]) + dailyStat[rand_stat][2] + ". "
+    + prefixes[rand_prefix][0] + comparisons[index][1] + ".";
 
     //match up with a corresponding html image
     //document.getElementById('image').src = "assets/ksi.jpg";

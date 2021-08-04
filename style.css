@@ -20,7 +20,7 @@ body
 .stat {
     color:white;
     position: absolute;
-    top: 84%;
+    top: 70%;
     left: 50%;
     text-align: center;
     transform: translate(-50%, -0%);
@@ -35,9 +35,9 @@ body
 
 .box {
     position: absolute; 
-    top: 87%;
+    top: 70%;
     width: 55%; 
-    height: 11%; 
+    height: 20%; 
     left: 50%;
     transform: translate(-50%, -0%);
     background-color: gray;
@@ -53,9 +53,9 @@ body
 
 .box:hover {
   position: absolute; 
-  top: 86%;
+  top: 70%;
   width: 55%; 
-  height: 13%; 
+  height: 22%; 
   left: 50%;
   background-color: gray;
   background-image:
